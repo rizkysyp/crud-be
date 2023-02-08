@@ -10,7 +10,7 @@ const app = express();
 app.use(morgan("dev"));
 
 const corsOptions = {
-  origin: "https://crud.rizkyproject.my.id/",
+  origin: "*",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
