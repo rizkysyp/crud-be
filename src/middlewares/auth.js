@@ -1,29 +1,30 @@
+const { verify } = require("../helpers/jwt");
 const { response } = require("./response");
-const jwt = require("jsonwebtoken");
+const createError = require("http-errors");
 
-let key = process.env.JWT_KEY;
-
-const protect = (req, res, next) => {
+module.exports.user = async (req, res, next) => {
   try {
-    let token;
-    if (req.headers.authorization) {
-      let auth = req.headers.authorization;
-      token = auth.split(" ")[1];
-      let decode = jwt.verify(token, key);
-      req.payload = decode;
+    console.log(req.headers);
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      let token = req.headers.authorization.split(" ")[1];
+      console.log(token);
+      const payload = await verify(token);
+      console.log(payload);
+      req.payload = payload;
       next();
     } else {
-      return response(res, 404, false, null, "server need token");
+      response(res, [], 200, "SERVER NEED TOKEN");
     }
-  } catch (err) {
-    if (err && err.name == "JsonWebTokenError") {
-      return response(res, 404, false, null, "invalid token");
-    } else if (err && err.name == "TokenExpriredError") {
-      return response(res, 404, false, null, "expired token");
+  } catch (error) {
+    if (error && error.name === "JsonWebTokenError") {
+      next(createError(400, "token invalid"));
+    } else if (error && error.name === "TokenExpiredError") {
+      next(createError(400, "token expired"));
     } else {
-      return response(res, 404, false, null, "token not active");
+      next(createError(400, "Token not active"));
     }
   }
 };
-
-module.exports = { protect };

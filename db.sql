@@ -9,9 +9,12 @@ CREATE TABLE users(
 CREATE TABLE products(
     id INT PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
     name VARCHAR NOT NULL,
-    sellprice VARCHAR NOT NULL,
-    buyprice VARCHAR NOT NULL,
-    stock VARCHAR NOT NULL,
+    sellprice INT NOT NULL,
+    buyprice INT NOT NULL,
+    stock INT NOT NULL,
     id_users VARCHAR,
     photo VARCHAR
 );
+
+SELECT products.id, products.name,products.sellprice,products.buyprice,products.stock,products.photo FROM products as products
+        WHERE products.name ILIKE ('%%') AND products.id_users = '5f08fa6f-266e-4b50-9e38-491c1d290466' ORDER BY products.id

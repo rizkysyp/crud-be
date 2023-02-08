@@ -1,9 +1,9 @@
 const Pool = require("../config/db");
 
-const addProducts = ({ name, sellprice, buyprice, stock, photo }, id_users) => {
+const addProducts = ({ name, sellprice, buyprice, stock, photo, id_users }) => {
   return new Promise((resolve, reject) => {
     Pool.query(
-      `INSERT INTO products(name,sellprice,buyprice,stock,photo,id_users) VALUES ('${name}','${sellprice}','${buyprice}','${stock}','${photo}','1')`,
+      `INSERT INTO products(name,sellprice,buyprice,stock,photo,id_users) VALUES ('${name}','${sellprice}','${buyprice}','${stock}','${photo}','${id_users}')`,
       (err, result) => {
         if (!err) {
           resolve(result);
@@ -59,7 +59,8 @@ const deleteProducts = (id) => {
   });
 };
 
-const getAll = ({ search, sortBy, sortOrder, limit, offset }) => {
+const getAll = ({ search, sortBy, id_users }) => {
+  console.log(id_users, "ini model iduser");
   return new Promise((resolve, reject) =>
     Pool.query(
       `SELECT products.id, products.name,products.sellprice,products.buyprice,products.stock,products.photo FROM products as products

@@ -5,6 +5,7 @@ const ModelProduct = require("../model/product");
 const productController = {
   insert: async (req, res, next) => {
     try {
+      const id_users = req.payload.id;
       const { name, sellprice, buyprice, stock } = req.body;
 
       const image = await cloudinary.uploader.upload(req.file.path, {
@@ -12,6 +13,7 @@ const productController = {
       });
 
       const data = {
+        id_users,
         name,
         sellprice,
         buyprice,
@@ -30,11 +32,13 @@ const productController = {
       const sortBy = req.query.sortBy || "name";
       const sortOrder = req.query.sortOrder || "DESC";
       const search = req.query.search || "";
-
+      const id_users = req.payload.id;
+      console.log(id_users, "ini id controller");
       const result = await ModelProduct.getAll({
         search,
         sortBy,
         sortOrder,
+        id_users,
       });
       response(res, 200, true, result.rows, "get product success");
     } catch (error) {

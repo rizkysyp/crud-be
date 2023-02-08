@@ -47,6 +47,8 @@ const userController = {
       if (!validation) {
         return response(res, 404, false, null, "wrong password");
       }
+
+      delete users.password;
       let payload = {
         id: users.id,
         fullname: users.fullname,

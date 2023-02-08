@@ -1,17 +1,11 @@
 const jwt = require("jsonwebtoken");
 
-const generateToken = async (email, id) => {
-  const payload = {
-    email,
-    id,
-    type: "access-token",
+const generateToken = (payload) => {
+  const verifyOpts = {
+    expiresIn: "1h",
   };
-  const options = {
-    algorithm: "HS256",
-    expiresIn: "1d",
-  };
-  const result = await jwt.sign(payload, process.env.SECRET_KEY, options);
-  return result;
+  const token = jwt.sign(payload, process.env.SECRET_KEY, verifyOpts);
+  return token;
 };
 
 const generateRefreshToken = (payload) => {
